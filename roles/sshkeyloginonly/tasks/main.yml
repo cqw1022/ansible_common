@@ -64,6 +64,12 @@
     line: 'PubkeyAuthentication yes'   
     state: present
 
+- name: ban root login.
+  lineinfile:
+    path: "/etc/ssh/sshd_config" 
+    regexp: '^#?PermitRootLogin' 
+    line: 'PermitRootLogin no'
+    state: present
 # - name: Allow new incoming SYN packets on TCP port sshkeys_remote_host (SSH).
 #   firewalld:
 #     port: "{{ sshkeys_remote_host }}/tcp"
