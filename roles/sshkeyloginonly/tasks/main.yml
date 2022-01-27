@@ -64,21 +64,21 @@
     line: 'PubkeyAuthentication yes'   
     state: present
 
-- name: Allow new incoming SYN packets on TCP port sshkeys_remote_host (SSH).
-  firewalld:
-    port: "{{ sshkeys_remote_host }}/tcp"
-    zone: public
-    immediate: true
-    permanent: yes
-    state: enabled
+# - name: Allow new incoming SYN packets on TCP port sshkeys_remote_host (SSH).
+#   firewalld:
+#     port: "{{ sshkeys_remote_host }}/tcp"
+#     zone: public
+#     immediate: true
+#     permanent: yes
+#     state: enabled
 
-- name: add port
-  lineinfile: 
-    path: "/etc/ssh/sshd_config"
-    regexp: "^Port 22" 
-    line: "Port {{ sshkeys_remote_host }}" 
-    insertafter: "^# What " 
-    state: present
+# - name: add port
+#   lineinfile: 
+#     path: "/etc/ssh/sshd_config"
+#     regexp: "^Port 22" 
+#     line: "Port {{ sshkeys_remote_host }}" 
+#     insertafter: "^# What " 
+#     state: present
 
 - name: restart sshd
   command: echo "this task will restart the sshd services"

@@ -1,5 +1,5 @@
 # need host var: host_root_password, host_user, host_group, host_password, host_key
-- hosts: "origin_hosts"
+- hosts: "{{ pb_hosts }}"
   # remote_user: root
   become: yes
   roles:
