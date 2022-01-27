@@ -1,0 +1,5 @@
+---
+- hosts: "{{ pb_hosts }}"
+  become: yes
+  roles:
+    - { role: firewall_config }

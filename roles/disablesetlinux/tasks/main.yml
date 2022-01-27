@@ -1,0 +1,9 @@
+---
+
+- name: Close SELinux
+  shell: 
+    cmd: setenforce 0
+
+- name: Disable SELinux
+  selinux:
+    state: disabled
