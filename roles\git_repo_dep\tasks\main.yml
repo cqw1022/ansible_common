@@ -1,0 +1,19 @@
+---
+- name: Setup Known Hosts Without Port
+  known_hosts:
+    key: "{{ lookup('pipe', 'ssh-keyscan -tecdsa-sha2-nistp256 ' + git_host) }}"
+    name: "{{ git_host }}"
+    state: present
+
+- name: "Clone the git repo"
+  git:
+    repo: '{{ git_repo }}'
+    key_file: "{{ git_key }}"
+    dest: '{{ git_dir }}'
+    version: '{{ git_branch }}'
+    force: yes
+    clone: yes
+    update: yes
+
+- debug:
+    msg: "'{{ git_repo }}': '{{ git_branch }}'"

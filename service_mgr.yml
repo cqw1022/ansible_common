@@ -1,0 +1,6 @@
+#git_repo git_key git_dir git_branch
+- hosts: "{{ pb_hosts }}"
+  # remote_user: root
+  become: yes
+  roles:
+    - { role: service_mgr }

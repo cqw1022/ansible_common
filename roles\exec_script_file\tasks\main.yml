@@ -1,0 +1,16 @@
+---
+
+- name: Change Script File Mode
+  ansible.builtin.file:
+    path: '{{script_work_dir}}/{{script_file}}'
+    mode: '0700'
+
+- name: Exec Script File
+  ansible.builtin.shell: '{{script_work_dir}}/{{script_file}}'
+  args:
+    chdir: '{{script_work_dir}}'
+  register: script_result
+
+- name: shell output
+  debug:
+    var: script_result.stdout_lines

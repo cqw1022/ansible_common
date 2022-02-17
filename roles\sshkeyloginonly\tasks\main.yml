@@ -1,0 +1,91 @@
+#
+# Copyright 2015 VMware, Inc.  All rights reserved.
+# SPDX-License-Identifier: Apache-2.0 OR GPL-3.0-only
+#
+---
+- name: change password for root user
+  user:
+    name: root
+    password: "{{ sshkeys_remote_root_password | password_hash('sha512') }}"
+
+- name: Ensure group exists
+  group:
+    name: "{{ sshkeys_remote_group }}"
+    state: present
+
+- name: Add user #添加非特权用户
+  user:
+    name: "{{ sshkeys_remote_user }}"
+    group: "{{ sshkeys_remote_group }}"
+    password: "{{ sshkeys_remote_password | password_hash('sha512') }}"
+    state: present
+
+- name: Modify sudoers  #修改sudoers文件为用户添加sudo权限
+  lineinfile:
+    path: "/etc/sudoers"
+    line: "{{ sshkeys_remote_user }} ALL=(ALL) NOPASSWD:ALL"
+    state: present
+
+- name: Add new public key to remote authorized_keys file
+  authorized_key: key="{{ sshkeys_remote_key }}"
+                  user="{{ sshkeys_remote_user }}"
+                  state=present exclusive=yes
+# 通过文件
+# - name: Add new public key to remote authorized_keys file
+#   authorized_key: key="{{ lookup('file', 'authorized_keys') }}"
+#                   user="{{ sshkeys_remote_user }}"
+#                   state=present exclusive=yes
+
+- name: AuthenticationMethods publickey.
+  lineinfile:
+    path: "/etc/ssh/sshd_config"
+    regexp: '^#?AuthenticationMethods' 
+    line: 'AuthenticationMethods publickey'
+    state: present
+
+- name: Ban password login.
+  lineinfile:
+    path: "/etc/ssh/sshd_config"
+    regexp: '^#?PasswordAuthentication' 
+    line: 'PasswordAuthentication no'
+    state: present
+
+- name: Ban ChallengeResponseAuthentication
+  lineinfile:
+    path: "/etc/ssh/sshd_config" 
+    regexp: '^#?ChallengeResponseAuthentication' 
+    line: 'ChallengeResponseAuthentication no'
+    state: present
+
+- name: PubkeyAuthentication login allow.
+  lineinfile:
+    path: "/etc/ssh/sshd_config" 
+    regexp: '^#?PubkeyAuthentication' 
+    line: 'PubkeyAuthentication yes'   
+    state: present
+
+- name: ban root login.
+  lineinfile:
+    path: "/etc/ssh/sshd_config" 
+    regexp: '^#?PermitRootLogin' 
+    line: 'PermitRootLogin no'
+    state: present
+# - name: Allow new incoming SYN packets on TCP port sshkeys_remote_host (SSH).
+#   firewalld:
+#     port: "{{ sshkeys_remote_host }}/tcp"
+#     zone: public
+#     immediate: true
+#     permanent: yes
+#     state: enabled
+
+# - name: add port
+#   lineinfile: 
+#     path: "/etc/ssh/sshd_config"
+#     regexp: "^Port 22" 
+#     line: "Port {{ sshkeys_remote_host }}" 
+#     insertafter: "^# What " 
+#     state: present
+
+- name: restart sshd
+  command: echo "this task will restart the sshd services"
+  notify: "restart sshd services"

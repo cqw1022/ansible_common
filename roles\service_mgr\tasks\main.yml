@@ -1,0 +1,6 @@
+---
+- name: "Service Mgr"
+  service: 
+    name: '{{service_name}}'
+    enabled: "{{service_start_on_boot}}"
+    state: '{{service_state}}'

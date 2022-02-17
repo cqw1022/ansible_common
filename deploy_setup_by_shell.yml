@@ -1,0 +1,22 @@
+
+# git_repo
+# git_key
+# git_branch
+# deploy_dir
+# pb_hosts
+- hosts: "{{ pb_hosts }}"
+  remote_user: root
+  become: yes
+  roles:
+    - role: install_package 
+      vars:
+        package_name: git
+        
+    - role: git_repo_dep
+      vars: 
+        git_dir: '{{ deploy_dir }}'
+
+    - role: exec_script_file
+      vars: 
+        script_work_dir: '{{ deploy_dir }}'
+        script_file: setup.sh

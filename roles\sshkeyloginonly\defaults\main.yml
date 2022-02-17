@@ -1,0 +1,11 @@
+---
+# User that should own ssh keys on the local side
+sshkeys_local_user: "{{ lookup('env', 'USER') }}"
+
+# User on the remote hosts, we'll ssh in as
+sshkeys_remote_user: "{{ host_user }}"
+sshkeys_remote_group: "{{ host_group }}"
+sshkeys_remote_password: "{{ host_password }}"
+sshkeys_remote_host: "{{ host_port }}"
+sshkeys_remote_root_password: "{{ host_root_password }}"
+sshkeys_remote_key: "{{ host_key }}"

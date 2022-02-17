@@ -1,0 +1,5 @@
+---
+- hosts: "{{ pb_hosts }}"
+  become: yes
+  roles:
+    - { role: exec_script_file }

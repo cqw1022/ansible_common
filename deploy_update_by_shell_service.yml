@@ -1,0 +1,30 @@
+
+# git_repo
+# git_key
+# git_branch
+# deploy_dir
+- hosts: "{{ pb_hosts }}"
+  # remote_user: root
+  become: yes
+  roles:
+    - role: service_mgr
+      vars:
+        service_name: '{{service_name}}'
+        service_start_on_boot: yes
+        service_state: stopped
+    
+    - role: git_repo_dep
+      vars: 
+        git_dir: '{{ deploy_dir }}'
+
+    - role: exec_script_file
+      vars: 
+        script_work_dir: '{{ deploy_dir }}'
+        script_file: update.sh
+    
+    - role: service_mgr
+      vars:
+        service_name: '{{service_name}}'
+        service_start_on_boot: yes
+        service_state: started
+    

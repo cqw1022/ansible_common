@@ -1,0 +1,31 @@
+
+# git_repo
+# git_key
+# git_branch
+# deploy_dir
+# start_script
+# stop_script
+- hosts: "{{ pb_hosts }}"
+  remote_user: root
+  become: yes
+  roles:
+    - role: exec_script_file
+      vars:
+        script_work_dir: "{{deploy_dir}}"
+        script_file: "{{stop_script}}"
+    
+    - role: git_repo_dep
+      vars: 
+        git_dir: '{{ deploy_dir }}'
+
+    - role: exec_script_file
+      vars: 
+        script_work_dir: '{{ deploy_dir }}'
+        script_file: update.sh
+    
+    - role: exec_script_file
+      vars:
+        script_work_dir: "{{deploy_dir}}"
+        script_file: "{{start_script}}"
+    
+    

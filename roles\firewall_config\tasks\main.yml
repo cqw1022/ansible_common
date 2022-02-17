@@ -1,0 +1,8 @@
+- name: Allow new incoming SYN packets on TCP port.
+  firewalld:
+    port: "{{item.port}}"
+    zone: "{{item.zone}}"
+    immediate: true
+    permanent: yes
+    state: "{{item.state}}"
+  with_items: "{{ firewall_configs }}"
