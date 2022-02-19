@@ -4,5 +4,4 @@
     name: '{{item}}'
     enabled: "{{service_start_on_boot}}"
     state: '{{service_state}}'
-    with_items: 
-      - "{{ service_names }}"
+    with_items: "{{ service_names }}"
